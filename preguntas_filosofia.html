@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kahoot Filosofía</title>
+    <link rel="stylesheet" href="preguntas_filosofia.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Kahoot de Filosofía General</h1>
+
+        <div id="extra-info-container" class="hidden">
+            <span id="timer-display">Tiempo: 00:00</span>
+            <span id="streak-display">Racha: 0 🔥</span>
+        </div>
+
+        <div id="game-area" class="hidden"> 
+            <div id="score-container">
+                Puntuación: <span id="score">0</span> | Pregunta: <span id="question-number">0</span>/<span id="total-questions">0</span>
+            </div>
+            <div id="progress-bar-container">
+                <div id="progress-bar"></div>
+            </div>
+            <div id="question-container">
+                <p id="question-text">Cargando pregunta...</p>
+            </div>
+            <div id="options-container"></div>
+            <p id="feedback-text"></p>
+            <button id="next-btn" class="control-btn hidden">Siguiente Pregunta</button>
+        </div>
+
+        <div id="results-container" class="hidden">
+            <h2>¡Juego Terminado!</h2>
+            <p id="final-score">Tu puntuación final es: 0</p>
+            <p id="grade-display">Tienes aproximadamente X/10</p>
+        </div>
+
+        <!-- Controles Globales: Siempre visibles debajo del área principal (juego o resultados) -->
+         <div id="global-controls-container"> 
+             <div class="controls-row">
+                 <button id="start-new-game-btn" class="control-btn">Empezar Juego Nuevo</button>
+                 <button id="continue-game-btn" class="control-btn hidden">Continuar Juego</button> 
+             </div>
+             <div id="saved-game-stats" class="hidden"></div>
+         </div>
+    </div>
+
+    <script src="preguntas_filosofia.js"></script>
+</body>
+</html>
