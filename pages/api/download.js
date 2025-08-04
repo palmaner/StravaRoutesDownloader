@@ -19,6 +19,21 @@ export default async function handler(req, res) {
       res.status(400).send('No se pudo extraer el ID de actividad.');
       return;
     }
+
+    let activityName = '';
+    try {
+      const oembedUrl = `https://www.strava.com/oembed?url=https://www.strava.com/activities/${activityId}`;
+      const oembedResponse = await fetch(oembedUrl);
+      if (oembedResponse.ok) {
+        const oembedData = await oembedResponse.json();
+        if (oembedData && oembedData.title) {
+          activityName = oembedData.title;
+        }
+      }
+    } catch (e) {
+      console.error('Error fetching activity name from oEmbed, falling back to ID', e);
+    }
+
     const gpxUrl = `https://www.strava.com/activities/${activityId}/export_gpx`;
     const gpxResponse = await fetch(gpxUrl, { headers: { 'Accept': 'application/gpx+xml' } });
     if (!gpxResponse.ok) {
@@ -26,8 +41,13 @@ export default async function handler(req, res) {
       return;
     }
     const gpxText = await gpxResponse.text();
+
+    const sanitizedActivityName = activityName
+      ? activityName.replace(/[^a-z0-9\s-]/gi, '').replace(/\s+/g, '_')
+      : `activity_${activityId}`;
+
     res.setHeader('Content-Type', 'application/gpx+xml');
-    res.setHeader('Content-Disposition', `attachment; filename="activity_${activityId}.gpx"`);
+    res.setHeader('Content-Disposition', `attachment; filename="${sanitizedActivityName}.gpx"`);
     res.status(200).send(gpxText);
   } catch (error) {
     console.error(error);
