@@ -22,17 +22,16 @@ export default async function handler(req, res) {
 
     let activityName = '';
     try {
-      const activityPageResponse = await fetch(location);
-      if (activityPageResponse.ok) {
-        const html = await activityPageResponse.text();
-        const titleMatch = html.match(/<title>(.*?)<\/title>/);
-        if (titleMatch && titleMatch[1]) {
-          // Extraer el nombre de la actividad, que suele estar antes de " | Strava"
-          activityName = titleMatch[1].split('|')[0].trim();
+      const oembedUrl = `https://www.strava.com/oembed?url=https://www.strava.com/activities/${activityId}`;
+      const oembedResponse = await fetch(oembedUrl);
+      if (oembedResponse.ok) {
+        const oembedData = await oembedResponse.json();
+        if (oembedData && oembedData.title) {
+          activityName = oembedData.title;
         }
       }
     } catch (e) {
-      console.error('Error fetching activity name, falling back to ID', e);
+      console.error('Error fetching activity name from oEmbed, falling back to ID', e);
     }
 
     const gpxUrl = `https://www.strava.com/activities/${activityId}/export_gpx`;
